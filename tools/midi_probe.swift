@@ -8,15 +8,16 @@ final class MidiProbe {
 
     func start() {
         MIDIClientCreate("Rokid MIDI Probe" as CFString, nil, nil, &client)
-        MIDIInputPortCreateWithProtocol(
+        MIDIInputPortCreate(
             client,
             "Rokid MIDI Input" as CFString,
-            MIDIProtocolID._1_0,
+            { packetList, context, _ in
+                let probe = Unmanaged<MidiProbe>.fromOpaque(context!).takeUnretainedValue()
+                probe.handle(packetList: packetList.pointee)
+            },
+            Unmanaged.passUnretained(self).toOpaque(),
             &input
-        ) { eventList, context in
-            let probe = Unmanaged<MidiProbe>.fromOpaque(context!).takeUnretainedValue()
-            probe.handle(eventList: eventList.pointee)
-        }
+        )
 
         let sourceCount = MIDIGetNumberOfSources()
         if sourceCount == 0 {
@@ -39,38 +40,31 @@ final class MidiProbe {
         RunLoop.current.run()
     }
 
-    func handle(eventList: MIDIEventList) {
-        withUnsafePointer(to: eventList.packet) { packetPointer in
+    func handle(packetList: MIDIPacketList) {
+        withUnsafePointer(to: packetList.packet) { packetPointer in
             var packet = packetPointer
-            for _ in 0..<eventList.numPackets {
-                let words = Mirror(reflecting: packet.pointee.words).children.compactMap { $0.value as? UInt32 }
-                for word in words.prefix(Int(packet.pointee.wordCount)) {
-                    emit(word: word)
+            for _ in 0..<packetList.numPackets {
+                let data = Mirror(reflecting: packet.pointee.data).children.compactMap { $0.value as? UInt8 }
+                let bytes = Array(data.prefix(Int(packet.pointee.length)))
+                var index = 0
+                while index < bytes.count {
+                    let status = bytes[index]
+                    let kind = status & 0xF0
+                    let length = (kind == 0xC0 || kind == 0xD0) ? 2 : 3
+                    if index + length <= bytes.count {
+                        emit(bytes: Array(bytes[index..<(index + length)]))
+                    }
+                    index += length
                 }
-                packet = UnsafePointer(MIDIEventPacketNext(UnsafeMutablePointer(mutating: packet)))
+                packet = UnsafePointer(MIDIPacketNext(UnsafeMutablePointer(mutating: packet)))
             }
         }
     }
 
-    func emit(word: UInt32) {
-        let byte0 = UInt8(word & 0xFF)
-        let byte1 = UInt8((word >> 8) & 0xFF)
-        let byte2 = UInt8((word >> 16) & 0xFF)
-        let byte3 = UInt8((word >> 24) & 0xFF)
-
-        let status: UInt8
-        let data1: UInt8
-        let data2: UInt8
-        if byte0 >> 4 == 0x2 {
-            status = byte1
-            data1 = byte2
-            data2 = byte3
-        } else {
-            status = byte0
-            data1 = byte1
-            data2 = byte2
-        }
-
+    func emit(bytes: [UInt8]) {
+        let status = bytes[0]
+        let data1 = bytes.count > 1 ? bytes[1] : 0
+        let data2 = bytes.count > 2 ? bytes[2] : 0
         let kind = status & 0xF0
         let channel = Int(status & 0x0F) + 1
         if kind == 0xB0 {
