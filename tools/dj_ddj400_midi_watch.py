@@ -50,6 +50,7 @@ def main() -> None:
     parser.add_argument("--start", type=int, default=1, help="1-based starting track index matching rekordbox selection")
     parser.add_argument("--control", help="Fixed CC mapping as channel:control. If omitted, first relative CC is learned.")
     parser.add_argument("--reverse", action="store_true", help="Reverse browse direction")
+    parser.add_argument("--debug-events", action="store_true", help="Print incoming MIDI events before filtering")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
@@ -87,6 +88,8 @@ def main() -> None:
             if event.get("event") == "source":
                 print(f"MIDI source {event.get('index')}: {event.get('name')}")
                 continue
+            if args.debug_events:
+                print(f"MIDI event: {event}")
 
             key = event_key(event)
             if not key:

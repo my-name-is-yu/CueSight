@@ -53,9 +53,24 @@ final class MidiProbe {
     }
 
     func emit(word: UInt32) {
-        let status = UInt8(word & 0xFF)
-        let data1 = UInt8((word >> 8) & 0xFF)
-        let data2 = UInt8((word >> 16) & 0xFF)
+        let byte0 = UInt8(word & 0xFF)
+        let byte1 = UInt8((word >> 8) & 0xFF)
+        let byte2 = UInt8((word >> 16) & 0xFF)
+        let byte3 = UInt8((word >> 24) & 0xFF)
+
+        let status: UInt8
+        let data1: UInt8
+        let data2: UInt8
+        if byte0 >> 4 == 0x2 {
+            status = byte1
+            data1 = byte2
+            data2 = byte3
+        } else {
+            status = byte0
+            data1 = byte1
+            data2 = byte2
+        }
+
         let kind = status & 0xF0
         let channel = Int(status & 0x0F) + 1
         if kind == 0xB0 {
