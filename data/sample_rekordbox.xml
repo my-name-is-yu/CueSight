@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DJ_PLAYLISTS Version="1.0.0">
+  <COLLECTION Entries="3">
+    <TRACK TrackID="1" Name="Glue" Artist="Bicep" AverageBpm="124" Tonality="Am" Rating="3" Colour="Blue" Comments="melodic warmup" Location="file://localhost/Users/demo/Music/Bicep%20-%20Glue.mp3" />
+    <TRACK TrackID="2" Name="Atlas" Artist="Lane 8" AverageBpm="124" Tonality="Am" Rating="3" Colour="Green" Comments="safe melodic" Location="file://localhost/Users/demo/Music/Lane%208%20-%20Atlas.mp3" />
+    <TRACK TrackID="3" Name="Jungle" Artist="Fred again.." AverageBpm="132" Tonality="Bm" Rating="4" Colour="Red" Comments="lift vocal" Location="file://localhost/Users/demo/Music/Fred%20again..%20-%20Jungle.mp3" />
+  </COLLECTION>
+  <PLAYLISTS>
+    <NODE Type="0" Name="ROOT" Count="1">
+      <NODE Type="0" Name="Playlists" Count="1">
+        <NODE Type="1" Name="Main Set" Entries="3">
+          <TRACK Key="1" />
+          <TRACK Key="2" />
+          <TRACK Key="3" />
+        </NODE>
+      </NODE>
+    </NODE>
+  </PLAYLISTS>
+</DJ_PLAYLISTS>

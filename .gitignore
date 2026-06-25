@@ -1,0 +1,14 @@
+.DS_Store
+
+# Android / Gradle build outputs
+.gradle/
+build/
+app/build/
+local.properties
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Local debug artifacts
+*.log

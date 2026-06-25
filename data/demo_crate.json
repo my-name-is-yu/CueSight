@@ -1,0 +1,76 @@
+{
+  "tracks": [
+    {
+      "id": "bicep-glue",
+      "title": "Glue",
+      "artist": "Bicep",
+      "bpm": 124,
+      "key": "Am",
+      "energy": 6,
+      "tags": ["melodic", "emotional", "warmup"]
+    },
+    {
+      "id": "lane8-atlas",
+      "title": "Atlas",
+      "artist": "Lane 8",
+      "bpm": 124,
+      "key": "Am",
+      "energy": 6,
+      "tags": ["melodic", "safe", "warmup"]
+    },
+    {
+      "id": "fred-jungle",
+      "title": "Jungle",
+      "artist": "Fred again..",
+      "bpm": 132,
+      "key": "Bm",
+      "energy": 8,
+      "tags": ["lift", "vocal", "peak"]
+    },
+    {
+      "id": "skrillex-rumble",
+      "title": "Rumble",
+      "artist": "Skrillex, Fred again.. & Flowdan",
+      "bpm": 140,
+      "key": "F#m",
+      "energy": 9,
+      "tags": ["wild", "bass", "shock"]
+    },
+    {
+      "id": "four-tet-baby",
+      "title": "Baby",
+      "artist": "Four Tet",
+      "bpm": 126,
+      "key": "C",
+      "energy": 7,
+      "tags": ["groove", "lift", "melodic"]
+    },
+    {
+      "id": "overmono-good-lies",
+      "title": "Good Lies",
+      "artist": "Overmono",
+      "bpm": 130,
+      "key": "Dm",
+      "energy": 7,
+      "tags": ["vocal", "groove", "safe"]
+    },
+    {
+      "id": "burial-archangel",
+      "title": "Archangel",
+      "artist": "Burial",
+      "bpm": 134,
+      "key": "Em",
+      "energy": 5,
+      "tags": ["reset", "emotional", "wild"]
+    },
+    {
+      "id": "caribou-cant-do",
+      "title": "Can't Do Without You",
+      "artist": "Caribou",
+      "bpm": 128,
+      "key": "G",
+      "energy": 7,
+      "tags": ["vocal", "lift", "melodic"]
+    }
+  ]
+}
