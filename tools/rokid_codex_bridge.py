@@ -18,6 +18,8 @@ from pathlib import Path
 
 PACKAGE = "dev.rokid.codexbridge"
 REMOTE_FILE = "files/latest.txt"
+ROOT = Path(__file__).resolve().parents[1]
+PREVIEW_FILE = ROOT / "data" / "rokid_hud_preview.txt"
 
 
 def run_adb(args: list[str], *, input_text: str | None = None) -> subprocess.CompletedProcess[str]:
@@ -75,6 +77,11 @@ def push_message(body: str, serial: str | None = None) -> None:
         raise SystemExit((write.stderr or write.stdout).strip())
 
 
+def write_local_preview(body: str) -> None:
+    PREVIEW_FILE.parent.mkdir(parents=True, exist_ok=True)
+    PREVIEW_FILE.write_text(body.strip() + "\n", encoding="utf-8")
+
+
 def read_input(args: argparse.Namespace) -> str:
     if args.message:
         return args.message
@@ -91,12 +98,15 @@ def main() -> None:
     parser.add_argument("--message", help="Message body to send")
     parser.add_argument("--file", help="Read message body from a file")
     parser.add_argument("--serial", default=os.environ.get("ROKID_ADB_SERIAL"), help="ADB serial to use")
+    parser.add_argument("--preview-only", action="store_true", help="Update the Mac preview without sending over ADB")
     args = parser.parse_args()
 
     message = textwrap.dedent(read_input(args)).strip()
     if not message:
         raise SystemExit("Message is empty.")
-    push_message(message, serial=args.serial)
+    write_local_preview(message)
+    if not args.preview_only:
+        push_message(message, serial=args.serial)
 
 
 if __name__ == "__main__":

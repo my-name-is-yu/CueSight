@@ -56,7 +56,8 @@ def main() -> None:
     tracks = load_tracks(resolve_crate(args.crate))
     selected = min(max(args.start - 1, 0), len(tracks) - 1)
     locked_control = parse_control(args.control)
-    last_hud = ""
+    last_hud = build_browser_hud(selected, tracks)
+    send_to_rokid(last_hud, args.dry_run)
 
     env = dict(os.environ)
     env.setdefault("CLANG_MODULE_CACHE_PATH", "/tmp/rokid-clang-cache")

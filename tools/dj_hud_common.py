@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CRATE = ROOT / "data" / "demo_crate.json"
 REKORDBOX_CRATE = ROOT / "data" / "rekordbox_crate.json"
 BRIDGE = ROOT / "tools" / "rokid_codex_bridge.py"
+PREVIEW_FILE = ROOT / "data" / "rokid_hud_preview.txt"
 MAX_TITLE_CHARS = 24
 
 
@@ -106,6 +107,7 @@ def ellipsize(value: str, limit: int) -> str:
 
 
 def send_to_rokid(text: str, dry_run: bool = False) -> None:
+    write_local_preview(text)
     if dry_run:
         print("\n" + "=" * 48)
         print(text)
@@ -120,3 +122,8 @@ def send_to_rokid(text: str, dry_run: bool = False) -> None:
     )
     if proc.returncode != 0:
         raise SystemExit((proc.stderr or proc.stdout).strip())
+
+
+def write_local_preview(text: str) -> None:
+    PREVIEW_FILE.parent.mkdir(parents=True, exist_ok=True)
+    PREVIEW_FILE.write_text(text.strip() + "\n", encoding="utf-8")

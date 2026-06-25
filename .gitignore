@@ -12,3 +12,4 @@ __pycache__/
 
 # Local debug artifacts
 *.log
+data/rokid_hud_preview.txt
